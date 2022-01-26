@@ -28,6 +28,10 @@
 
         // Step 4 - perform insertion / deletion
         MainContent.appendChild(MainParagraph);
+
+        // Test our new Contact Class
+        let darryl = new Contact("Darryl Olsen", "555-555-5555", "testmail@gmail.com")
+        console.log(darryl.toString())
     }
 
     function DisplayProductsPage()
