@@ -186,7 +186,7 @@
 
         $("body").append(`<article class="container">
         <h5> Video Editing - Mitchell
-        </h5><img src="./Images/video-editing.png" alt="Editing software" width="650" height="400" />
+        </h5><img src="Images/video-editing.png" alt="Editing software" width="650" height="400" />
         </article>`);
 
         
