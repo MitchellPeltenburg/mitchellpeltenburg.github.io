@@ -1,5 +1,5 @@
 /**
- * Mitchell Peltenburg and Deonte Bayliss
+ * Mitchell Peltenburg (100503758) and Deonte Bayliss (100814241)
  * WEBD6201
  * February 6 2022
  * Tom Tsiliopoulos
@@ -50,8 +50,8 @@
         <article class="container">
         <h5> Mitchell's Projects</h5>
         <div class="d-flex flex-nowrap">
-          <div class="order-3 p-2"><img src="./Images/webpage2.png" alt="webpage2" width="450" height="450" /></div>
-          <div class="order-2 p-2"><img src="./Images/webpage1.png" alt="webpage1" width="450" height="450" /></div>
+          <div class="order-3 p-2"><img src="./Images/webpage2.PNG" alt="webpage2" width="450" height="450" /></div>
+          <div class="order-2 p-2"><img src="./Images/webpage1.PNG" alt="webpage1" width="450" height="450" /></div>
         </div>
         
         </article>`);
@@ -67,7 +67,7 @@
         </article>`);
 
         $("body").append(`<article class="container">
-        <img src="./Images/video.png" alt="Video-Screenshot" width="650" height="400" />
+        <img src="./Images/video.PNG" alt="Video-Screenshot" width="650" height="400" />
         </article>`);
 
         
@@ -117,7 +117,7 @@
         AddBottomNavbar();
     }
 
-        /**
+    /**
      * Displays the services page and injects the text for the page
      */
     function DisplayServicesPage()
