@@ -32,6 +32,8 @@ class Contact
     }
 
     //public methods
+
+    //Serializes the Contact object
     serialize()
     {
         if(this.FullName !== "" && this.ContactNumber !== "" && this.EmailAddress !== "")
@@ -45,6 +47,7 @@ class Contact
         }
     }
 
+    //Deserializes the Contact object
     deserialize(data)
     {
         let propertyArray = data.split(","); //assume that data is a comma-separated list of properties (strings)
@@ -62,6 +65,7 @@ class Contact
     }
 
     // public overrides
+    //Formats output that will later be printed to the console
     toString()
     {
         return `Full Name      : ${this.FullName}\n Contact Number: ${this.ContactNumber}\n Email Address : ${this.EmailAddress}`;

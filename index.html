@@ -21,19 +21,19 @@
               </button>
               <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                  <li class="nav-item">
+                  <li id="home-link" class="nav-item">
                     <a class="nav-link active" aria-current="page" href="index.html"><i class="fas fa-home"></i> Home</a>
                   </li>
-                  <li class="nav-item">
+                  <li id="products-link" class="nav-item">
                     <a class="nav-link" href="products.html"><i class="fas fa-project-diagram"></i> Products</a>
                   </li>
-                  <li class="nav-item">
+                  <li id="services-link" class="nav-item">
                     <a class="nav-link" href="services.html"><i class="fas fa-map"></i> Services</a>
                   </li>
-                  <li class="nav-item">
+                  <li id="about-link" class="nav-item">
                     <a class="nav-link" href="about.html"><i class="fas fa-info"></i> About Us</a>
                   </li>
-                  <li class="nav-item">
+                  <li id="contact-link" class="nav-item">
                     <a class="nav-link" href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a>
                   </li>
                 </ul>
@@ -43,9 +43,17 @@
     </header>
 
     <main class="container">
-        <h1 class="mb-5"><i class="fas fa-drum"></i> Welcome to ICE-3</h1>
-        <button id="AboutUsButton" class="btn btn-primary">Learn More About Us!</button>
+      <!-- Background image -->
+      <div
+      class="bg-image d-flex justify-content-center align-items-center">
 
+      <!-- Flex box within background image -->
+      <div class="d-flex flex-column mb-3">
+        <div class="p-2"><h1 class="mb-5" style="color:white"><i class="fas fa-drum"></i> Welcome to Our Site</h1></div>
+        <div class="p-2"><button id="AboutUsButton" class="btn btn-primary">Learn More About Us!</button></div>
+        <div class="p-2"><p></p></div>
+      </div>          
+      <!-- Background image -->
     </main>
     <!-- Scripting Section -->
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
