@@ -2,6 +2,55 @@
 //AKA -- Anonymous Self-Executing Function
 (function()
 {
+    /**
+     * This function uses AJAX to open a connection to the server and returns
+     * the data payload to the callback function
+     * 
+     * @param {string} method 
+     * @param {string} url 
+     * @param {Function} callback 
+     */
+    function AjaxRequest(method, url, callback)
+    {
+        //AJAX STEPS
+        // Step 1. - instantiate an XHR Object
+        let XHR = new XMLHttpRequest();
+
+        // Step 2. - add an event listener for readystatechange
+        XHR.addEventListener("readystatechange", () =>
+        {
+            if (XHR.readyState === 4 && XHR.status === 200)
+            {
+                if(typeof callback === "function")
+                {
+                    callback(XHR.responseText);
+                }
+                else
+                {
+                    console.error("ERROR: callback not a function");
+                }
+            }
+        });
+
+        // Step 3. - Open a connection to the server
+        XHR.open(method, url);
+
+        // Step 4. - Send the request to the server
+        XHR.send();
+    }
+
+    /**
+     * This function loads the header.html content into the page
+     * 
+     * @param {string} html_data 
+     */
+    function LoadHeader(html_data)
+    {
+        $("header").html(html_data);
+        $(`li>a:contains(${document.title})`).addClass("active"); //Look for an anchor tag inside of a list item that says 'Home' and update active link
+        checkLogin();
+    }
+
     function DisplayHomePage()
     {
         console.log("Home Page");
@@ -15,10 +64,7 @@
 
 
         $("main").append(`<p id="MainParagraph" class="mt-3">This is the Main Paragraph!</p>`);
-
-        // Test our new core.Contact Class
-        let darryl = new core.Contact("Darryl Olsen", "555-555-5555", "testmail@gmail.com")
-        console.log(darryl.toString())
+        
     }
 
     function DisplayProductsPage()
@@ -39,6 +85,14 @@
     function DisplayContactPage()
     {
         console.log("Contact Page");
+
+        // check if user is logged in
+        if(!sessionStorage.getItem("user"))
+        {
+            // if not... hide show contact list button
+            $('a').hide();
+        }
+
 
         ContactFormValidation();
 
@@ -187,13 +241,14 @@
 
     function DisplayContactListPage()
     {
+
         if(localStorage.length > 0)
         {
             let contactList = document.getElementById("contactList");
 
             let data = "";
 
-            let keys = Object.keys(localStorage); //returns a list o keys from localStorage
+            let keys = Object.keys(localStorage); //returns a list of keys from localStorage
 
             let index = 1;
 
@@ -245,6 +300,86 @@
     function DisplayLoginPage()
     {
         console.log("Login Page");
+        let messageArea = $("#messageArea");
+        messageArea.hide();
+
+        $("#loginButton").on("click", function()
+        {
+            let success = false;
+            // create an empty user object
+            let newUser = new core.User();
+
+            // uses jQuery shortcut to load the users.json file
+            $.get("./Data/users.json", function(data)
+            {
+                // for every user in the users.json file
+                for (const user of data.users) 
+                {
+                    // check if the username and password entered in the form matches this user
+                    if(username.value == user.Username && password.value == user.Password)
+                    {
+                        console.log("success");
+                        console.log(user);
+                        console.log(newUser);
+                        // get the user data from the file and assign to our empty user object
+                        newUser.fromJSON(user);
+                        success = true;
+                        break;
+                    }
+                }
+                // if username and password matches - success... then perform the login sequence
+            if(success)
+            {
+                // add user to session storage
+                sessionStorage.setItem("user", newUser.serialize());
+
+                // hide any error message
+                messageArea.removeAttr("class").hide();
+
+                // redirect the user to the secure area of our site - contact-list.html
+                location.href = "contact-list.html";
+            }
+            // else if bad credentials were entered...
+            else
+            {
+                // display an error message
+                $("#username").trigger("focus").trigger("select");
+                messageArea.addClass("alert alert-danger").text("Error: Invalid Login Information").show();
+            }
+            });
+
+        });
+
+        $("#cancelButton").on("click", function()
+        {
+            // clear the login form
+            document.forms[0].reset();
+
+            //return to the home page
+            location.href = "index.php";
+        });
+    }
+
+    function checkLogin()
+    {
+        // if user is logged in
+        if(sessionStorage.getItem("user"))
+        {
+            
+            // swap out the login link for logout   
+            $("#login").html(
+                `<a id="logout" class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>`
+            ); //Look for an anchor tag inside of a list item that says 'Login' and update active link
+            
+            $("#logout").on("click", function()
+            {
+                // perform logout
+                sessionStorage.clear();
+
+                //redirect back to login
+                location.href = "login.html";
+            });
+        }
     }
 
     function DisplayRegisterPage()
@@ -253,9 +388,11 @@
     }
 
     //named function
-    let Start = function()
+    function Start()
     {
         console.log("App Started!");
+
+        AjaxRequest("GET", "header.html", LoadHeader);
 
         switch (document.title) {
           case "Home":
