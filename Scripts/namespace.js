@@ -1,2 +1,2 @@
-"use scrict";
+"use strict";
 let core;
