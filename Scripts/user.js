@@ -2,17 +2,15 @@
 var core;
 (function (core) {
     class User {
-        constructor(displayName = "", emailAddress = "", username = "", password = "") {
-            this.m_displayName = displayName;
-            this.m_emailAddress = emailAddress;
-            this.m_username = username;
-            this.m_password = password;
-        }
+        m_displayName;
+        m_emailAddress;
+        m_username;
+        m_password;
         get DisplayName() {
             return this.m_displayName;
         }
-        set DisplayName(name) {
-            this.m_displayName = name;
+        set DisplayName(display_name) {
+            this.m_displayName = display_name;
         }
         get EmailAddress() {
             return this.m_emailAddress;
@@ -32,8 +30,14 @@ var core;
         set Password(password) {
             this.m_password = password;
         }
+        constructor(displayName = "", emailAddress = "", username = "", password = "") {
+            this.m_displayName = displayName;
+            this.m_emailAddress = emailAddress;
+            this.m_username = username;
+            this.m_password = password;
+        }
         toString() {
-            return `Display Name    : ${this.DisplayName} \nEmail Address : ${this.EmailAddress} \nUsername : ${this.Username}`;
+            return `Display Name  : ${this.DisplayName}\nEmail Address : ${this.EmailAddress}\nUsername : ${this.Username}`;
         }
         toJSON() {
             return {
@@ -52,10 +56,8 @@ var core;
             if (this.DisplayName !== "" && this.EmailAddress !== "" && this.Username !== "") {
                 return `${this.DisplayName},${this.EmailAddress},${this.Username}`;
             }
-            else {
-                console.error("One or more properties of the User is empty");
-                return null;
-            }
+            console.error("One or more properties of the User Object are missing or empty");
+            return null;
         }
         deserialize(data) {
             let propertyArray = data.split(",");
