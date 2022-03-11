@@ -1,6 +1,6 @@
 "use strict";
 ((function () {
-    var protected_routes = [
+    let protected_routes = [
         "contact-list"
     ];
     if (protected_routes.indexOf(router.ActiveLink) > -1) {
