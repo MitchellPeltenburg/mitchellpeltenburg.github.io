@@ -1,7 +1,7 @@
 "use strict";
 (function () {
     function AuthGuard() {
-        let protected_routes = [
+        var protected_routes = [
             "contact-list"
         ];
         if (protected_routes.indexOf(router.ActiveLink) > -1) {
@@ -10,7 +10,8 @@
             }
         }
     }
-    function LoadLink(link, data = "") {
+    function LoadLink(link, data) {
+        if (data === void 0) { data = ""; }
         router.ActiveLink = link;
         AuthGuard();
         router.LinkData = data;
@@ -19,11 +20,11 @@
         $("ul>li>a").each(function () {
             $(this).removeClass("active");
         });
-        $(`li>a:contains(${document.title})`).addClass("active");
+        $("li>a:contains(".concat(document.title, ")")).addClass("active");
         LoadContent();
     }
     function AddNavigationEvents() {
-        let NavLinks = $("ul>li>a");
+        var NavLinks = $("ul>li>a");
         NavLinks.off("click");
         NavLinks.off("mouseover");
         NavLinks.on("click", function () {
@@ -34,14 +35,14 @@
         });
     }
     function AddLinkEvents(link) {
-        let linkQuery = $(`a.link[data=${link}]`);
+        var linkQuery = $("a.link[data=".concat(link, "]"));
         linkQuery.off("click");
         linkQuery.off("mouseover");
         linkQuery.off("mouseout");
         linkQuery.css("text-decoration", "underline");
         linkQuery.css("color", "blue");
         linkQuery.on("click", function () {
-            LoadLink(`${link}`);
+            LoadLink("".concat(link));
         });
         linkQuery.on("mouseover", function () {
             $(this).css('cursor', 'pointer');
@@ -59,27 +60,25 @@
         });
     }
     function LoadContent() {
-        let page_name = router.ActiveLink;
-        let callback = ActiveLinkCallBack();
-        $.get(`./Views/content/${page_name}.html`, function (html_date) {
+        var page_name = router.ActiveLink;
+        var callback = ActiveLinkCallBack();
+        $.get("./Views/content/".concat(page_name, ".html"), function (html_date) {
             $("main").html(html_date);
             callback();
         });
     }
     function LoadFooter() {
-        $.get(`./Views/components/footer.html`, function (html_date) {
+        $.get("./Views/components/footer.html", function (html_date) {
             $("footer").html(html_date);
         });
     }
     function DisplayHomePage() {
         console.log("Home Page");
-        $("#AboutUsButton").on("click", () => {
+        $("#AboutUsButton").on("click", function () {
             LoadLink("about");
         });
-        $("main").append(`<p id="MainParagraph" class="mt-3">This is the Main Paragraph</p>`);
-        $("main").append(`<article>
-        <p id="ArticleParagraph" class ="mt-3">This is the Article Paragraph</p>
-        </article>`);
+        $("main").append("<p id=\"MainParagraph\" class=\"mt-3\">This is the Main Paragraph</p>");
+        $("main").append("<article>\n        <p id=\"ArticleParagraph\" class =\"mt-3\">This is the Article Paragraph</p>\n        </article>");
     }
     function DisplayProductsPage() {
         console.log("Products Page");
@@ -91,16 +90,16 @@
         console.log("About Page");
     }
     function AddContact(fullName, contactNumber, emailAddress) {
-        let contact = new core.Contact(fullName, contactNumber, emailAddress);
+        var contact = new core.Contact(fullName, contactNumber, emailAddress);
         if (contact.serialize()) {
-            let key = contact.FullName.substring(0, 1) + Date.now();
+            var key = contact.FullName.substring(0, 1) + Date.now();
             localStorage.setItem(key, contact.serialize());
         }
     }
     function ValidateField(fieldID, regular_expression, error_message) {
-        let messageArea = $("#messageArea").hide();
+        var messageArea = $("#messageArea").hide();
         $("#" + fieldID).on("blur", function () {
-            let text_value = $(this).val();
+            var text_value = $(this).val();
             if (!regular_expression.test(text_value)) {
                 $(this).trigger("focus").trigger("select");
                 messageArea.addClass("alert alert-danger").text(error_message).show();
@@ -122,16 +121,16 @@
             LoadLink("contact-list");
         });
         ContactFormValidation();
-        let sendButton = document.getElementById("sendButton");
-        let subscribeCheckbox = document.getElementById("subscribeCheckbox");
+        var sendButton = document.getElementById("sendButton");
+        var subscribeCheckbox = document.getElementById("subscribeCheckbox");
         sendButton.addEventListener("click", function (event) {
             if (subscribeCheckbox.checked) {
-                let fullName = document.forms[0].fullName.value;
-                let contactNumber = document.forms[0].contactNumber.value;
-                let emailAddress = document.forms[0].emailAddress.value;
-                let contact = new core.Contact(fullName, contactNumber, emailAddress);
+                var fullName = document.forms[0].fullName.value;
+                var contactNumber = document.forms[0].contactNumber.value;
+                var emailAddress = document.forms[0].emailAddress.value;
+                var contact = new core.Contact(fullName, contactNumber, emailAddress);
                 if (contact.serialize()) {
-                    let key = contact.FullName.substring(0, 1) + Date.now();
+                    var key = contact.FullName.substring(0, 1) + Date.now();
                     localStorage.setItem(key, contact.serialize());
                 }
             }
@@ -139,22 +138,16 @@
     }
     function DisplayContactListPage() {
         if (localStorage.length > 0) {
-            let contactList = document.getElementById("contactList");
-            let data = "";
-            let keys = Object.keys(localStorage);
-            let index = 1;
-            for (const key of keys) {
-                let contactData = localStorage.getItem(key);
-                let contact = new core.Contact();
+            var contactList = document.getElementById("contactList");
+            var data = "";
+            var keys = Object.keys(localStorage);
+            var index = 1;
+            for (var _i = 0, keys_1 = keys; _i < keys_1.length; _i++) {
+                var key = keys_1[_i];
+                var contactData = localStorage.getItem(key);
+                var contact = new core.Contact();
                 contact.deserialize(contactData);
-                data += `<tr>
-                <th scope="row" class="text-center">${index}</th>
-                <td>${contact.FullName}</td>
-                <td>${contact.ContactNumber}</td>
-                <td>${contact.EmailAddress}</td>
-                <td class="text-center"><button value="${key}" class="btn btn-primary btn-sm edit"><i class="fas fa-edit fa-sm"></i> Edit</button></td>
-                <td class="text-center"><button value="${key}" class="btn btn-danger btn-sm delete"><i class="fas fa-trash-alt fa-sm"></i> Delete</button></td>
-                </tr>`;
+                data += "<tr>\n                <th scope=\"row\" class=\"text-center\">".concat(index, "</th>\n                <td>").concat(contact.FullName, "</td>\n                <td>").concat(contact.ContactNumber, "</td>\n                <td>").concat(contact.EmailAddress, "</td>\n                <td class=\"text-center\"><button value=\"").concat(key, "\" class=\"btn btn-primary btn-sm edit\"><i class=\"fas fa-edit fa-sm\"></i> Edit</button></td>\n                <td class=\"text-center\"><button value=\"").concat(key, "\" class=\"btn btn-danger btn-sm delete\"><i class=\"fas fa-trash-alt fa-sm\"></i> Delete</button></td>\n                </tr>");
                 index++;
             }
             contactList.innerHTML = data;
@@ -168,48 +161,48 @@
                 LoadLink("edit", $(this).val());
             });
         }
-        $("#addButton").on("click", () => {
+        $("#addButton").on("click", function () {
             LoadLink("edit", "add");
         });
     }
     function DisplayEditPage() {
         console.log("Edit Page");
         ContactFormValidation();
-        let page = router.LinkData;
+        var page = router.LinkData;
         switch (page) {
             case "add":
                 {
                     $("main>h1").text("Add Contact");
-                    $("#editButton").html(`<i class="fas fa-plus-circle fa-lg"></i> Add`);
-                    $("#editButton").on("click", (event) => {
+                    $("#editButton").html("<i class=\"fas fa-plus-circle fa-lg\"></i> Add");
+                    $("#editButton").on("click", function (event) {
                         event.preventDefault();
-                        let fullName = document.forms[0].fullName.value;
-                        let contactNumber = document.forms[0].contactNumber.value;
-                        let emailAddress = document.forms[0].emailAddress.value;
+                        var fullName = document.forms[0].fullName.value;
+                        var contactNumber = document.forms[0].contactNumber.value;
+                        var emailAddress = document.forms[0].emailAddress.value;
                         AddContact(fullName, contactNumber, emailAddress);
                         LoadLink("contact-list");
                     });
-                    $("#cancelButton").on("click", () => {
+                    $("#cancelButton").on("click", function () {
                         LoadLink("contact-list");
                     });
                 }
                 break;
             default:
                 {
-                    let contact = new core.Contact();
-                    contact.deserialize(localStorage.getItem(page));
-                    $("#fullName").val(contact.FullName);
-                    $("#contactNumber").val(contact.ContactNumber);
-                    $("#emailAddress").val(contact.EmailAddress);
-                    $("#editButton").on("click", (event) => {
+                    var contact_1 = new core.Contact();
+                    contact_1.deserialize(localStorage.getItem(page));
+                    $("#fullName").val(contact_1.FullName);
+                    $("#contactNumber").val(contact_1.ContactNumber);
+                    $("#emailAddress").val(contact_1.EmailAddress);
+                    $("#editButton").on("click", function (event) {
                         event.preventDefault();
-                        contact.FullName = $("#fullName").val();
-                        contact.ContactNumber = $("#contactNumber").val();
-                        contact.EmailAddress = $("#emailAddress").val();
-                        localStorage.setItem(page, contact.serialize());
+                        contact_1.FullName = $("#fullName").val();
+                        contact_1.ContactNumber = $("#contactNumber").val();
+                        contact_1.EmailAddress = $("#emailAddress").val();
+                        localStorage.setItem(page, contact_1.serialize());
                         LoadLink("contact-list");
                     });
-                    $("#cancelButton").on("click", () => {
+                    $("#cancelButton").on("click", function () {
                         LoadLink("contact-list");
                     });
                 }
@@ -218,26 +211,27 @@
     }
     function CheckLogin() {
         if (sessionStorage.getItem("user")) {
-            $("#login").html(`<a id="logout" class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>`);
+            $("#login").html("<a id=\"logout\" class=\"nav-link\" href=\"#\"><i class=\"fas fa-sign-out-alt\"></i> Logout</a>");
             $("#logout").on("click", function () {
                 sessionStorage.clear();
-                $("#login").html(`<a class="nav-link" data="login"><i class="fas fa-sign-in-alt"></i> Login</a>`);
+                $("#login").html("<a class=\"nav-link\" data=\"login\"><i class=\"fas fa-sign-in-alt\"></i> Login</a>");
                 LoadLink("login");
             });
         }
     }
     function DisplayLoginPage() {
         console.log("Login Page");
-        let messageArea = $("#messageArea");
+        var messageArea = $("#messageArea");
         messageArea.hide();
         AddLinkEvents("register");
         $("#loginButton").on("click", function () {
-            let success = false;
-            let newUser = new core.User();
+            var success = false;
+            var newUser = new core.User();
             $.get("./Data/users.json", function (data) {
-                for (const user of data.users) {
-                    let username = document.forms[0].username.value;
-                    let password = document.forms[0].password.value;
+                for (var _i = 0, _a = data.users; _i < _a.length; _i++) {
+                    var user = _a[_i];
+                    var username = document.forms[0].username.value;
+                    var password = document.forms[0].password.value;
                     if (username == user.Username && password == user.Password) {
                         newUser.fromJSON(user);
                         success = true;
